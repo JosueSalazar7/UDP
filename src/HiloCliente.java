@@ -28,7 +28,7 @@ public class HiloCliente extends Thread{
             byte[] bufferSalida = resouesta.getBytes();
 
             //Crear paquete para enviar datos
-            DatagramPacket paquete_respuesta = new DatagramPacket(bufferSalida, 0, bufferSalida.length);
+            DatagramPacket paquete_respuesta = new DatagramPacket(bufferSalida, 0, bufferSalida.length, direccionIP_cliente, puerto_cliente);
 
             //Enviar Datagrama
             socket.send(paquete_respuesta);

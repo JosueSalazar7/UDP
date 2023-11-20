@@ -18,9 +18,7 @@ public class servidorUDP {
             // Crear paquete
 
             socket.receive(paquete);
-
             // Inciar un nuevo hilo para manejar solicitudes de cliente
-
             Thread hilo_cliente = new HiloCliente(socket, paquete);
             hilo_cliente.start();
         } catch (Exception e) {
