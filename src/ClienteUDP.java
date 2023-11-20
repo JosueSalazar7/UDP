@@ -16,7 +16,7 @@ public class ClienteUDP {
             byte[] bufferSalida = mensaje.getBytes();
 
             //Crear paquetes para eunviar datos
-            DatagramPacket paquete_enviar = new DatagramPacket(bufferSalida, 0, bufferSalida.length);
+            DatagramPacket paquete_enviar = new DatagramPacket(bufferSalida, 0, bufferSalida.length, direccion_servidor,puerto);
 
             //Enviar paquete
             socket.send(paquete_enviar);
