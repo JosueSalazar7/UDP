@@ -1,38 +1,43 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Scanner;
 
-
-public class HiloCliente extends Thread{
+public class HiloCliente extends Thread {
     private DatagramSocket socket;
     private DatagramPacket paquete;
+    private Scanner scanner;
 
-    //Constructor
-    public HiloCliente(DatagramSocket socket, DatagramPacket paquete){
-        this.socket=socket;
-        this.paquete=paquete;
+    // Constructor
+    public HiloCliente(DatagramSocket socket, DatagramPacket paquete, Scanner scanner) {
+        this.socket = socket;
+        this.paquete = paquete;
+        this.scanner = scanner;
     }
-    public void run(){
+
+    public void run() {
         try {
-            //Extraer la información del pquete recibido
-            String mensajeRecibido = new String(paquete.getData());
+            // Extraer la información del paquete recibido
+            String mensajeRecibido = new String(paquete.getData(), paquete.getOffset(), paquete.getLength());
             System.out.println("Mensaje recibido: " + mensajeRecibido);
 
-            //obtener la dirección del cliente
-            InetAddress direccionIP_cliente = (InetAddress) paquete.getAddress();
+            // Obtener la dirección del cliente
+            InetAddress direccionIP_cliente = paquete.getAddress();
             int puerto_cliente = paquete.getPort();
 
-            //Mensaje respuesta
-            String resouesta = "Hola, soy el servidor";
-            //Arreglos de bytes para enviar los datos
-            byte[] bufferSalida = resouesta.getBytes();
+            // Mensaje respuesta
+            System.out.print("Ingresa una respuesta: ");
+            String respuesta = scanner.nextLine();
 
-            //Crear paquete para enviar datos
-            DatagramPacket paquete_respuesta = new DatagramPacket(bufferSalida, 0, bufferSalida.length, direccionIP_cliente, puerto_cliente);
+            // Arreglos de bytes para enviar los datos
+            byte[] bufferSalida = respuesta.getBytes();
 
-            //Enviar Datagrama
+            // Crear paquete para enviar datos
+            DatagramPacket paquete_respuesta = new DatagramPacket(bufferSalida, bufferSalida.length, direccionIP_cliente, puerto_cliente);
+
+            // Enviar Datagrama
             socket.send(paquete_respuesta);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

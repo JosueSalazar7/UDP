@@ -1,30 +1,38 @@
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+    import java.net.DatagramPacket;
+    import java.net.DatagramSocket;
+    import java.util.Scanner;
+    public class servidorUDP{
+        Scanner scanner = new Scanner(System.in);
+        public static void main(String[] args){
 
-public class servidorUDP {
-    public static void main(String[] args) throws IOException {
-        try {
-            int puerto = 5000;
+            try {
+                int puerto=5000; //Número de puerto
+                //Crear un socket UDP
+                DatagramSocket socket = new DatagramSocket(puerto);
+                System.out.println("Servidor esperando conexiones");
 
-            DatagramSocket socket = new DatagramSocket(puerto);
+                while (true) {
+                    // Arreglos de bytes para recibir los datos
+                    //Crear paquete para recibir datos
+                    DatagramPacket paquete;
+                    byte[] bufferEntrada = new byte[1024];
 
-            // Arreglos de bytes para recibir los datos
+                    paquete = new DatagramPacket(bufferEntrada,0, bufferEntrada.length);
+                    //Recibir paquete
+                    socket.receive(paquete);
+                    //Iniciar un nuevo hilo para manejar solicitudes de clientes
+                    Thread hilo_cliente = new HiloCliente(socket,paquete,new Scanner(System.in));
+                    hilo_cliente.start();
+                }
 
-            byte[] bufferEntrada = new byte[1024];
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-            DatagramPacket paquete = new DatagramPacket(bufferEntrada, 0, bufferEntrada.length);
 
-            // Crear paquete
 
-            socket.receive(paquete);
-            // Inciar un nuevo hilo para manejar solicitudes de cliente
-            Thread hilo_cliente = new HiloCliente(socket, paquete);
-            hilo_cliente.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
         }
-
     }
-
-}
